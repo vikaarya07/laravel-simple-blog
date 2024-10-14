@@ -15,6 +15,10 @@ Route::get('/posts/create', function () {
     return view('posts.create');
 });
 
+Route::get('/posts/edit', function () {
+    return view('posts.edit');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
