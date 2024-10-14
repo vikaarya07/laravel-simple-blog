@@ -15,6 +15,10 @@ Route::get('/posts/create', function () {
     return view('posts.create');
 });
 
+Route::get('/posts/show', function () {
+    return view('posts.show');
+});
+
 Route::get('/posts/edit', function () {
     return view('posts.edit');
 });
