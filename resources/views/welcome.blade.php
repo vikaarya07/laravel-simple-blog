@@ -60,7 +60,7 @@
                     </div>
                     <div class="rounded-md border p-5 shadow">
                         <div class="flex items-center gap-2">
-                            <span class="flex-none rounded bg-yellow-100 px-2 py-1 text-yellow-800">Future</span>
+                            <span class="flex-none rounded bg-yellow-100 px-2 py-1 text-yellow-800">Scheduled</span>
                             <h3><a href="#" class="text-blue-500">Post title 3</a></h3>
                         </div>
                         <div class="mt-4 flex items-end justify-between">

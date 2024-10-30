@@ -31,7 +31,7 @@
 
                             <div>
                                 <label for="is_draft" class="inline-flex items-center">
-                                    <input id="is_draft" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
+                                    <input id="is_draft" type="checkbox" value="1" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="is_draft">
                                     <span class="ms-2 text-sm text-gray-600">{{ __('Save as Draft') }}</span>
                                 </label>
                             </div>

@@ -5,15 +5,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/posts', function () {
     return view('posts.index');
-});
+})->name('posts.index');
 
 Route::get('/posts/create', function () {
     return view('posts.create');
-});
+})->name('posts.create');
 
 Route::get('/posts/show', function () {
     return view('posts.show');
