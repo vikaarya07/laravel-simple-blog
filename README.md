@@ -33,7 +33,8 @@ Build a simple blog system with basic user authentication and post management.
 
 1. Follow the "Laravel way" and implement Laravel best practices.
 2. Create a post seeder, including all possible statuses.
-3. Write HTTP tests for all routes to ensure your application behaves as expected and is reliable.
+3. Write HTTP tests for home and posts routes to ensure your application behaves as expected and is reliable.
+4. For team development, commit with an appropriate commit size and write suitable commit messages.
 
 ## 4. Hints
 - You can use any references or tools, such as official documentation, Stack Overflow, ChatGPT, Copilot, and Gemini.
