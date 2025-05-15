@@ -54,8 +54,7 @@
                                             class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:underline"
-                                                onclick="return confirm('Are you sure you want to delete this post?')">
+                                            <button type="submit" class="text-red-500 hover:underline btn-delete">
                                                 Delete
                                             </button>
                                         </form>
