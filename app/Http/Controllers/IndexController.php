@@ -11,7 +11,7 @@ class IndexController extends Controller
     public function index()
     {
         $posts = Auth::check()
-            ? Post::where('user_id', Auth::id())->paginate(10)
+            ? Post::where('user_id', Auth::id())->orderByDesc('published_at')->paginate(10)
             : collect();
 
         return view('home', compact('posts'));

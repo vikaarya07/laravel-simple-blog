@@ -24,7 +24,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::published()->latest()->paginate(10);
+        $posts = Post::published()->orderByDesc('published_at')->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
@@ -45,7 +45,14 @@ class PostController extends Controller
         $data['slug'] = Str::slug($data['title']);
         $data['user_id'] = Auth::id();
         $data['is_draft'] = $request->has('is_draft');
-        $data['published_at'] = $request->filled('published_at') ? now()->parse($request->input('published_at')) : null;
+
+        if ($data['is_draft']) {
+            $data['published_at'] = null;
+        } else {
+            $data['published_at'] = $request->filled('published_at')
+                ? now()->parse($request->input('published_at'))
+                : null;
+        }
 
         Post::create($data);
 
@@ -77,7 +84,14 @@ class PostController extends Controller
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
         $data['is_draft'] = $request->has('is_draft');
-        $data['published_at'] = $request->filled('published_at') ? now()->parse($request->input('published_at')) : null;
+
+        if ($data['is_draft']) {
+            $data['published_at'] = null;
+        } else {
+            $data['published_at'] = $request->filled('published_at')
+                ? now()->parse($request->input('published_at'))
+                : null;
+        }
 
         $post->update($data);
 
