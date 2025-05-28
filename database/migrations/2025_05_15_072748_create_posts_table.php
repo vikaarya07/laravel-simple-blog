@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('content');
             $table->boolean('is_draft')->default(false);
             $table->timestamp('published_at')->nullable();
+            $table->boolean('is_published')->default(false);
             $table->timestamps();
         });
     }

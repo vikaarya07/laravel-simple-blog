@@ -31,7 +31,7 @@
 
                             <div>
                                 <x-input-label for="published_at" :value="__('Publish Date')" />
-                                <x-text-input id="published_at" name="published_at" type="date"
+                                <x-text-input id="published_at" name="published_at" type="datetime-local"
                                     class="mt-1 block w-full" :value="old('published_at')" />
                                 <x-input-error :messages="$errors->get('published_at')" class="mt-2" />
                             </div>

@@ -30,13 +30,11 @@
 
                             <div>
                                 <x-input-label for="published_at" :value="__('Publish Date')" />
-                                <x-text-input id="published_at" name="published_at" type="date"
-                                    class="mt-1 block w-full" :value="old(
-                                        'published_at',
-                                        \Illuminate\Support\Str::of($post->published_at)->before(' '),
-                                    )" />
+                                <x-text-input id="published_at" name="published_at" type="datetime-local"
+                                    class="mt-1 block w-full" :value="old('published_at', optional($post->published_at)->format('Y-m-d\TH:i'))" />
                                 <x-input-error :messages="$errors->get('published_at')" class="mt-2" />
                             </div>
+
 
                             <div>
                                 <label for="is_draft" class="inline-flex items-center">

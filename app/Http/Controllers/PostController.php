@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Post;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class PostController extends Controller
 {
-    use AuthorizesRequests;
-
     public function __construct()
     {
         $this->middleware('auth')->except('index', 'show');
-        $this->authorizeResource(Post::class, 'post');
     }
 
     /**
@@ -33,6 +30,8 @@ class PostController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Post::class);
+
         return view('posts.create');
     }
 
@@ -41,6 +40,8 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
+        $this->authorize('create', Post::class);
+
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
         $data['user_id'] = Auth::id();
@@ -48,10 +49,13 @@ class PostController extends Controller
 
         if ($data['is_draft']) {
             $data['published_at'] = null;
+            $data['is_published'] = false;
         } else {
             $data['published_at'] = $request->filled('published_at')
-                ? now()->parse($request->input('published_at'))
-                : null;
+                ? Carbon::parse($request->input('published_at'))
+                : now();
+
+            $data['is_published'] = $data['published_at']->lte(now());
         }
 
         Post::create($data);
@@ -59,12 +63,31 @@ class PostController extends Controller
         return redirect()->route('home')->with('success', 'Post created successfully.');
     }
 
-
     /**
      * Display the specified resource.
      */
     public function show(Post $post)
     {
+        $now = Carbon::now();
+
+        if (!Auth::check() && $post->is_draft) {
+            abort(403, 'Unauthorized access for guests.');
+        }
+
+        if (!Auth::check() && $post->published_at && $post->published_at->isFuture()) {
+            abort(403, 'This post is not yet published.');
+        }
+
+        if (Auth::check() && $post->user_id !== Auth::id()) {
+            if ($post->is_draft) {
+                abort(403, 'You are not authorized to view this draft post.');
+            }
+
+            if ($post->published_at && $post->published_at->isFuture()) {
+                abort(403, 'This post is not yet published.');
+            }
+        }
+
         return view('posts.show', compact('post'));
     }
 
@@ -73,6 +96,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        $this->authorize('update', $post);
+
         return view('posts.edit', compact('post'));
     }
 
@@ -81,16 +106,21 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
+        $this->authorize('update', $post);
+
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
         $data['is_draft'] = $request->has('is_draft');
 
         if ($data['is_draft']) {
             $data['published_at'] = null;
+            $data['is_published'] = false;
         } else {
             $data['published_at'] = $request->filled('published_at')
-                ? now()->parse($request->input('published_at'))
-                : null;
+                ? Carbon::parse($request->input('published_at'))
+                : now();
+
+            $data['is_published'] = $data['published_at']->lte(now());
         }
 
         $post->update($data);
@@ -103,6 +133,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('destroy', $post);
+
         $post->delete();
         return redirect()->route('home')->with('success', 'Post deleted successfully.');
     }

@@ -18,14 +18,18 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-        $title = fake()->sentence;
+        $title = fake()->sentence();
+        $isDraft = fake()->boolean();
+        $isPublished = !$isDraft;
 
         return [
             'title' => $title,
             'slug' => Str::slug($title),
             'content' => fake()->paragraphs(3, true),
             'user_id' => User::inRandomOrder()->first()?->id ?? User::factory(),
-            'published_at' => now(),
+            'is_draft' => $isDraft,
+            'is_published' => $isPublished,
+            'published_at' => $isPublished ? now() : null,
             'created_at' => now(),
             'updated_at' => now(),
         ];

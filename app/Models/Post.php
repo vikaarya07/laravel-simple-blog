@@ -11,11 +11,11 @@ class Post extends Model
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'slug', 'content', 'is_draft', 'published_at'];
+    protected $fillable = ['user_id', 'title', 'slug', 'content', 'is_draft', 'published_at', 'is_published'];
 
     protected $with = ['user'];
 
-    protected $casts = ['is_draft' => 'boolean', 'published_at' => 'datetime'];
+    protected $casts = ['is_draft' => 'boolean', 'published_at' => 'datetime', 'is_published' => 'boolean'];
 
     public function getRouteKeyName()
     {
@@ -30,9 +30,7 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('is_draft', false)
-            ->where(function ($q) {
-                $q->whereNull('published_at')
-                    ->orWhere('published_at', '<=', now());
-            });
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now());
     }
 }
